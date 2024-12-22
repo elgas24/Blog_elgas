@@ -1,9 +1,14 @@
 'use strict';
+const User = require('./user');
+const Articles = require('./articles');
+const Images = require('./images');
+const Comments = require('./comments');
 
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const process = require('process');
+// const articles = require('./articles');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
@@ -39,5 +44,22 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+db.User = User(sequelize, DataTypes);
+db.Article = Articles(sequelize, DataTypes);
+db.Image = Images(sequelize, DataTypes);
+db.Comment = Comments(sequelize, DataTypes);
+
+db.Article.belongsTo(db.User, { foreignKey: 'authorId' });
+db.User.hasMany(db.Article, { foreignKey: 'authorId' });
+
+db.Article.hasMany(db.Image, { foreignKey: 'articleId' });
+db.Image.belongsTo(db.Article, { foreignKey: 'articleId' });
+
+db.Article.hasMany(db.Comment, { foreignKey: 'articleId' }); 
+db.Comment.belongsTo(db.Article, { foreignKey: 'articleId' });
+
+db.Comment.belongsTo(db.User, { foreignKey: 'userId' }); 
+db.User.hasMany(db.Comment, { foreignKey: 'userId' });
+
 
 module.exports = db;

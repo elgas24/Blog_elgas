@@ -4,6 +4,7 @@ const { User } = require("../models");
 const jwt = require("jsonwebtoken"); // Assuming you're using jsonwebtoken for token generation
 const bcrypt = require("bcrypt");
 const { Op } = require('sequelize'); // Import Op here
+const authMiddleware = require("../middleware/auth");
 require("dotenv");
 
 /* GET users listing. */
@@ -49,7 +50,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.put("/change_userName", async (req, res) => {
+router.put("/change_userName",authMiddleware, async (req, res) => {
   try {
     console.log(req.body);
     const { firstName, lastName,id,email} = req.body;
@@ -136,7 +137,7 @@ router.post("/sign_in", async (req, res) => {
   }
 });
 
-router.delete("/delete", async (req, res) => {
+router.delete("/delete",authMiddleware, async (req, res) => {
   console.log(req.body);
 
   try {
