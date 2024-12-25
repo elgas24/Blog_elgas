@@ -49,9 +49,13 @@ router.post("/signup", async (req, res) => {
     res.status(400).json(error);
   }
 });
-
+//TODO pay attention to be RESTfull , path url must be in lowercase prefe use change-username instanceof change_username _ (not recommended) less readable than - on url 
 router.put("/change_userName",authMiddleware, async (req, res) => {
   try {
+
+    //suggest:
+    //user is authenticated in this route , your must not pass the id on body just retrieve the user from authenticated  session
+    // if you want to pass the user id on body assure only admis can do that 
     console.log(req.body);
     const { firstName, lastName,id,email} = req.body;
     const userId = req.body.id;
@@ -61,6 +65,8 @@ router.put("/change_userName",authMiddleware, async (req, res) => {
     if(!user){
       return res.status(404).json({message:"user not found"});
     }
+    // why search with firstName + lastname, juste id (PK) . 
+    // no matter if multiple user have the same first/last name
     const userExistance = await User.findOne({
       where: {
         firstName,
@@ -108,12 +114,16 @@ router.post("/sign_in", async (req, res) => {
         email,
       },
     });
+    //change message , prefer something like: Bad credentials (more generic)
+    // if u say user not found , as a "hacker" i can change email ... to get an existing one
     if (!user) {
       return res.status(400).json({ message: "user not found" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
+    //same, i have an existing user i can try multiple password ... 
+    //Prefer for authentication to have generic message 
     if (!isPasswordValid) {
       return res.status(400).json({ message: "invalid password" });
     }
@@ -142,6 +152,7 @@ router.delete("/delete",authMiddleware, async (req, res) => {
 
   try {
     // Get the email from the request body (adjust based on your actual request structure)
+    // same for change username, user is authenticated so no need to pass email from request 
     const email = req.body.email;
     // Find user index
     const userExists = await User.findOne({
