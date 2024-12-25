@@ -31,5 +31,6 @@ module.exports = (sequelize) => {
     publishedAt: {
       type: DataTypes.DATE,
     },
+    //TODO : add hook to slugify based on the title pay attention unicity  
   });
 };
