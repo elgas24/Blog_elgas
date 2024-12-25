@@ -44,10 +44,10 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.User = User(sequelize, DataTypes);
-db.Article = Articles(sequelize, DataTypes);
-db.Image = Images(sequelize, DataTypes);
-db.Comment = Comments(sequelize, DataTypes);
+db.User = User(sequelize, Sequelize.DataTypes);
+db.Article = Articles(sequelize, Sequelize.DataTypes);
+db.Image = Images(sequelize, Sequelize.DataTypes);
+db.Comment = Comments(sequelize, Sequelize.DataTypes);
 
 db.Article.belongsTo(db.User, { foreignKey: 'authorId' });
 db.User.hasMany(db.Article, { foreignKey: 'authorId' });
