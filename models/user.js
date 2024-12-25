@@ -39,6 +39,7 @@ module.exports = (sequelize) => {
     },
     {
       hooks: {
+        //TODO: must add other hook on pre update to hash password in case password changed
         beforeCreate: async (user) => {
           user.password = await bcrypt.hash(user.password, 10);
         },
