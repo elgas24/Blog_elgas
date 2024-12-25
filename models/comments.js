@@ -12,6 +12,6 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    //TODO: need to add the author, and times like postedAt (createdAt), maybe "status" to monitor if comments is publishable or not
+    //TODO: need to add times like postedAt (createdAt), maybe "status" to monitor if comments is publishable or not
   });
 };
